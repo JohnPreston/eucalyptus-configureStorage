@@ -1,0 +1,15 @@
+---
+galaxy_info:
+  author: John Mille
+  description: Role to configure Eucalyptus Storage controllers properties
+  company: your company (optional)
+  min_ansible_version: 1.6
+  platforms:
+  - name: EL
+    versions:
+    - 6
+  categories:
+  - cloud
+  - cloud:ec2
+dependencies:
+- JohnPreston.eucalyptus-credentials

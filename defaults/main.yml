@@ -1,0 +1,6 @@
+################################################################################
+#
+# List of all storages (1/az) which contains the list of parameers
+#
+
+sc_clusters: []
