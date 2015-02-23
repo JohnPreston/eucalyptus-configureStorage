@@ -4,3 +4,4 @@
 #
 
 sc_clusters: []
+eucalyptus_cloudoutput_path: /var/log/eucalyptus/cloud-output.log

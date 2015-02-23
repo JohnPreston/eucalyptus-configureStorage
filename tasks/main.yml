@@ -11,13 +11,6 @@
   register: listening
   ignore_errors: True
 
-- name: Check SC is not set according to logs
-  wait_for: path="{{ eucalyptus_cloudoutput_path }}" search_regex="das,overlay"
-  tags:
-  - configure
-  when:
-  - listening|success
-
 - name: Configure SC block manager
   shell: source "{{ euca_admin_creds }}" ;
          euca-modify-property -p "{{ item['partition'] }}".storage.blockstoragemanager="{{ item['mode'] }}"
@@ -29,18 +22,15 @@
   when:
   - listening|success
 
-- name: Wait for SC to be ENABLED
-  pause: prompt="Making sure SC is now set to its block storage - properties can now be changed" seconds=30
-  tags:
-  - configureStorage
-  when:
-  - listening|success
-
 - name: Configure the block manager properties
   shell: source "{{ euca_admin_creds_path }}"/eucarc ; euca-modify-property -p "{{ item.0['partition'] }}".storage."{{ item.1['name'] }}"="{{ item.1['value'] }}"
   with_subelements:
   - "{{ sc_clusters }}"
   - properties
+  register: sc_register
+  until: sc_register.stdout.find("was") != -1
+  retries: 20
+  delay: 5
   tags:
   - configureStorage
   ignore_errors: yes
